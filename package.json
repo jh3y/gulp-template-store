@@ -1,0 +1,28 @@
+{
+  "name": "gulp-store",
+  "version": "0.0.0",
+  "description": "A gulp plugin for storing file contents in a namespace",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jh3y/gulp-store"
+  },
+  "keywords": [
+    "gulpplugin",
+    "file",
+    "store",
+    "html",
+    "template",
+    "json",
+    "gulp"
+  ],
+  "author": "jh3y <jh3y@live.co.uk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jh3y/gulp-store/issues"
+  },
+  "homepage": "https://github.com/jh3y/gulp-store"
+}
