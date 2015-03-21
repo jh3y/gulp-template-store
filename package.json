@@ -2,7 +2,7 @@
   "name": "gulp-store",
   "version": "0.0.0",
   "description": "A gulp plugin for storing file contents in a namespace",
-  "main": "index.js",
+  "main": "lib/index",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -24,5 +24,15 @@
   "bugs": {
     "url": "https://github.com/jh3y/gulp-store/issues"
   },
-  "homepage": "https://github.com/jh3y/gulp-store"
+  "homepage": "https://github.com/jh3y/gulp-store",
+  "devDependencies": {
+    "chai": "^2.1.2",
+    "gulp": "^3.8.11",
+    "gulp-coffee": "^2.3.1",
+    "mocha": "^2.2.1"
+  },
+  "dependencies": {
+    "gulp-util": "^3.0.4",
+    "through": "^2.3.6"
+  }
 }
