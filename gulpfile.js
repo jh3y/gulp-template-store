@@ -28,7 +28,7 @@ gulp.task('test:store', function(event) {
       base: 'src/jade/templates/',
       amd: true
     }, {
-      lodash: true
+      interpolate: /{{([\s\S]+?)}}/g
     }))
     .pipe(gulp.dest('tmp/'));
 });
