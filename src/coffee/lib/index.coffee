@@ -1,7 +1,7 @@
 through = require 'through2'
 util = require 'gulp-util'
 _ = require 'lodash'
-PLUGIN_NAME = 'gulp-store'
+PLUGIN_NAME = 'gulp-template-store'
 ext = '.html'
 rootDir = process.cwd()
 
