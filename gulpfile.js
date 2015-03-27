@@ -25,8 +25,7 @@ gulp.task('test:store', function(event) {
     .pipe(store({
       name: 'tmpl.js',
       variable: 'this.tmpl',
-      base: 'src/jade/templates/',
-      amd: true
+      base: 'src/jade/'
     }, {
       interpolate: /{{([\s\S]+?)}}/g
     }))
