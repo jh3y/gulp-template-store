@@ -3,7 +3,7 @@ var gulp = require('gulp'),
   jade = require('gulp-jade'),
   sources = {
     coffee: 'src/coffee/**/*.coffee',
-    jade: 'src/jade/**/*.jade'
+    templates: 'src/jade/templates/**/*.jade'
   },
   destinations = {
     js: './'
@@ -20,10 +20,16 @@ gulp.task('coffee:watch', function(event) {
 });
 gulp.task('test:store', function(event) {
   var store = require('./lib/index.js');
-  return gulp.src('src/jade/**/*.jade', {base: 'src/jade/'})
-    // .pipe(jade())
-    // .pipe(gulp.dest('./html/'));
-    .pipe(store())
+  return gulp.src(sources.templates, {base: 'src/jade/'})
+    .pipe(jade())
+    .pipe(store({
+      name: 'tmpl.js',
+      variable: 'this.tmpl',
+      base: 'src/jade/templates/',
+      amd: true
+    }, {
+      lodash: true
+    }))
     .pipe(gulp.dest('tmp/'));
 });
 

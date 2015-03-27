@@ -1,0 +1,15 @@
+.todo.in--edit-mode(class!="<%- color %>")
+  .actions
+    a.close(title="close")
+      i.fa.fa-close
+    a.color(title="change color")
+      i.fa.fa-paint-brush
+      .palette
+        .choice.bg--red(data-choice="red")
+        .choice.bg--yellow(data-choice="yellow")
+        .choice.bg--green(data-choice="green")
+        .choice.bg--blue(data-choice="blue")
+        .choice.bg--purple(data-choice="purple")
+    a.delete(title="delete")
+      i.fa.fa-trash
+  .description(contenteditable="true") <%- description %>
