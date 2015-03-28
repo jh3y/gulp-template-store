@@ -22,13 +22,14 @@ gulp.task('test:store', function(event) {
   var store = require('./lib/index.js');
   return gulp.src(sources.templates, {base: 'src/jade/'})
     .pipe(jade())
-    .pipe(store({
-      name: 'tmpl.js',
-      variable: 'this.tmpl',
-      base: 'src/jade/'
-    }, {
-      interpolate: /{{([\s\S]+?)}}/g
-    }))
+    // .pipe(store({
+    //   name: 'tmpl.js',
+    //   variable: 'this.tmpl',
+    //   base: 'src/jade/'
+    // }, {
+    //   interpolate: /{{([\s\S]+?)}}/g
+    // }))
+    .pipe(store())
     .pipe(gulp.dest('tmp/'));
 });
 

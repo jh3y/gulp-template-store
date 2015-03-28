@@ -52,9 +52,10 @@ templateStore = (opt, _opt) ->
     cb()
 
   end = (cb) ->
-    this.push new util.File
-      path: fileName
-      contents: new Buffer processInput()
+    if files.length > 0
+      this.push new util.File
+        path: fileName
+        contents: new Buffer processInput()
     cb()
   through.obj gather, end
 
