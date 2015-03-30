@@ -1,6 +1,6 @@
 {
   "name": "gulp-template-store",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A gulp plugin for storing file contents in a namespace file",
   "main": "lib/index",
   "scripts": {
