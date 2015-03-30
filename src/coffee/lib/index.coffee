@@ -2,7 +2,6 @@ through = require 'through2'
 util = require 'gulp-util'
 _ = require 'lodash'
 PLUGIN_NAME = 'gulp-template-store'
-ext = '.html'
 rootDir = process.cwd()
 
 
@@ -12,9 +11,9 @@ rootDir = process.cwd()
   Those are handled via _opt. We just need to check for interpolate setting.
 ###
 
-templateStore = (opt, _opt) ->
+templateStore = (opt) ->
   opt = opt or {}
-  _opt = _opt or {}
+  _opt = opt.options or {}
   files = []
   fileName = if opt.name and typeof opt.name is 'string' then opt.name else 'templates.js'
   fileVar = if opt.variable and typeof opt.variable is 'string' then opt.variable else 'this.tmpl'
@@ -29,7 +28,7 @@ templateStore = (opt, _opt) ->
   processFile = (file) ->
     str = file.path
     base = if opt.base and typeof opt.base is 'string' then opt.base else rootDir + '/'
-    key = str.slice(str.indexOf(base) + base.length, str.length - ext.length)
+    key = str.slice(str.indexOf(base) + base.length, str.lastIndexOf('.'))
     return _.template('"<%= name %>": <%= contents %>')(
       name: key
       contents: getTemplateFn file

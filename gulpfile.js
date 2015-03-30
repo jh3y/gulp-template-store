@@ -1,9 +1,8 @@
 var gulp = require('gulp'),
   coffee = require('gulp-coffee'),
-  jade = require('gulp-jade'),
   sources = {
     coffee: 'src/coffee/**/*.coffee',
-    templates: 'src/jade/templates/**/*.jade'
+    templates: 'test/templates/**/*.html'
   },
   destinations = {
     js: './'
@@ -20,16 +19,13 @@ gulp.task('coffee:watch', function(event) {
 });
 gulp.task('test:store', function(event) {
   var store = require('./lib/index.js');
-  return gulp.src(sources.templates, {base: 'src/jade/'})
-    .pipe(jade())
-    // .pipe(store({
-    //   name: 'tmpl.js',
-    //   variable: 'this.tmpl',
-    //   base: 'src/jade/'
-    // }, {
-    //   interpolate: /{{([\s\S]+?)}}/g
-    // }))
-    .pipe(store())
+  return gulp.src(sources.templates, {base: 'test/'})
+    .pipe(store({
+      base: 'test/'
+      // options: {
+      //   interpolate: /{{([\s\S]+?)}}/g
+      // }
+    }))
     .pipe(gulp.dest('tmp/'));
 });
 
