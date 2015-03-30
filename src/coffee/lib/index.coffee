@@ -1,15 +1,9 @@
 through = require 'through2'
 util = require 'gulp-util'
 _ = require 'lodash'
+
 PLUGIN_NAME = 'gulp-template-store'
 rootDir = process.cwd()
-
-
-###
-  Lodash options to cater for are interpolate, imports, and variable
-
-  Those are handled via _opt. We just need to check for interpolate setting.
-###
 
 templateStore = (opt) ->
   opt = opt or {}
@@ -17,6 +11,7 @@ templateStore = (opt) ->
   files = []
   fileName = if opt.name and typeof opt.name is 'string' then opt.name else 'templates.js'
   fileVar = if opt.variable and typeof opt.variable is 'string' then opt.variable else 'this.tmpl'
+  base = if opt.base and typeof opt.base is 'string' then opt.base else rootDir + '/'
 
   tmpl = fileVar + ' = { <%= contents %> };'
 
@@ -27,7 +22,6 @@ templateStore = (opt) ->
 
   processFile = (file) ->
     str = file.path
-    base = if opt.base and typeof opt.base is 'string' then opt.base else rootDir + '/'
     key = str.slice(str.indexOf(base) + base.length, str.lastIndexOf('.'))
     return _.template('"<%= name %>": <%= contents %>')(
       name: key

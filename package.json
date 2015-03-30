@@ -13,6 +13,10 @@
   "keywords": [
     "gulpplugin",
     "file",
+    "jst",
+    "lodash",
+    "underscore",
+    "concat",
     "store",
     "html",
     "template",

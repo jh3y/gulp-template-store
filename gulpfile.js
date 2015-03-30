@@ -19,9 +19,9 @@ gulp.task('coffee:watch', function(event) {
 });
 gulp.task('test:store', function(event) {
   var store = require('./lib/index.js');
-  return gulp.src(sources.templates, {base: 'test/'})
+  return gulp.src(sources.templates)
     .pipe(store({
-      base: 'test/'
+      // base: 'test/'
       // options: {
       //   interpolate: /{{([\s\S]+?)}}/g
       // }
