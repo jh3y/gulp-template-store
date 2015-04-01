@@ -1,3 +1,5 @@
+[![NPM](https://nodei.co/npm/gulp-template-store.png?downloads=true)](https://nodei.co/npm/gulp-template-store/)
+
 [![Build Status](https://travis-ci.org/jh3y/gulp-template-store.svg)](https://travis-ci.org/jh3y/gulp-template-store)
 #gulp-template-store
 A gulp plugin for storing all of your lodash templates in a single cache file.
