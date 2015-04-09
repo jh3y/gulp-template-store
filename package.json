@@ -1,7 +1,7 @@
 {
   "name": "gulp-template-store",
   "version": "1.0.0",
-  "description": "A gulp plugin for storing file contents in a namespace file",
+  "description": "A gulp plugin for storing lodash templates in a namespace object/JST file",
   "main": "lib/index",
   "scripts": {
     "test": "make test"
