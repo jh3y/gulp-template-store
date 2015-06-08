@@ -15,9 +15,11 @@ getCompiledResult = (result) ->
   sandbox
 
 genFile = (path, contents) ->
+  path = if path then path else 'test.js'
+  contents = if contents then contents else '<div><%= test %></div>'
   new util.File
-    path: process.cwd() + 'test.js'
-    contents: new Buffer '<div><%= test %></div>'
+    path: process.cwd() + path
+    contents: new Buffer contents
 
 suite PLUGIN_NAME, ->
   suite 'tmplStore()', ->
@@ -114,6 +116,17 @@ suite PLUGIN_NAME, ->
           name: 'test-templates.js'
         stream.on 'data', (file) ->
           expect(file.path).to.equal 'test-templates.js'
+        stream.write fakeFile
+        stream.end done
+
+      test 'barezzz', (done) ->
+        a = ->
+        fakeFile = genFile('a.js', a.toString())
+        stream = tmplStore
+          bare: true
+        stream.on 'data', (file) ->
+          res = getCompiledResult file.contents.toString()
+          expect(res.tmpl.a.toString()).to.equal a.toString()
         stream.write fakeFile
         stream.end done
 

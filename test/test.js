@@ -28,9 +28,11 @@ getCompiledResult = function(result) {
 };
 
 genFile = function(path, contents) {
+  path = path ? path : 'test.js';
+  contents = contents ? contents : '<div><%= test %></div>';
   return new util.File({
-    path: process.cwd() + 'test.js',
-    contents: new Buffer('<div><%= test %></div>')
+    path: process.cwd() + path,
+    contents: new Buffer(contents)
   });
 };
 
@@ -130,6 +132,21 @@ suite(PLUGIN_NAME, function() {
         });
         stream.on('data', function(file) {
           return expect(file.path).to.equal('test-templates.js');
+        });
+        stream.write(fakeFile);
+        return stream.end(done);
+      });
+      test('barezzz', function(done) {
+        var a, fakeFile, stream;
+        a = function() {};
+        fakeFile = genFile('a.js', a.toString());
+        stream = tmplStore({
+          bare: true
+        });
+        stream.on('data', function(file) {
+          var res;
+          res = getCompiledResult(file.contents.toString());
+          return expect(res.tmpl.a.toString()).to.equal(a.toString());
         });
         stream.write(fakeFile);
         return stream.end(done);

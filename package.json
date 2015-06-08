@@ -1,10 +1,10 @@
 {
   "name": "gulp-template-store",
-  "version": "1.0.0",
-  "description": "A gulp plugin for storing lodash templates in a namespace object/JST file",
+  "version": "1.1.0",
+  "description": "A gulp plugin for storing templates in a namespace object/JST file",
   "main": "lib/index",
   "scripts": {
-    "test": "make test"
+    "test": "./node_modules/.bin/mocha -u tdd --reporter spec"
   },
   "repository": {
     "type": "git",

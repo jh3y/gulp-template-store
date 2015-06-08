@@ -25,7 +25,7 @@ templateStore = (opt) ->
     key = str.slice(str.indexOf(base) + base.length, str.lastIndexOf('.'))
     return _.template('"<%= name %>": <%= contents %>')(
       name: key
-      contents: getTemplateFn file
+      contents: if opt.bare then file.contents.toString() else getTemplateFn file
     )
 
   processInput = ->

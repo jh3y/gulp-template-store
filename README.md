@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/jh3y/gulp-template-store.svg)](https://travis-ci.org/jh3y/gulp-template-store)
 #gulp-template-store
-A gulp plugin for storing all of your lodash templates in a single cache file.
+A gulp plugin for storing all of your templates in a single cache file.
 
 ```javascript
 this.tmpl = {
@@ -17,6 +17,11 @@ this.tmpl = {
     return __p
   }
 };
+```
+```javascript
+this.tmpl = {
+  "templates/superDiv": function(){ return document.createElement('div'); }
+}
 ```
 
 ##Install
@@ -40,8 +45,9 @@ gulp.task('templates:compile', function() {
   return gulp.src(sources.templates)
     .pipe(tmplStore({
       name: 'templates.js',
-      variable: 'this.templateCache'
-      base: 'src/html/'
+      variable: 'this.templateCache',
+      base: 'src/html/',
+      bare: false
       options: {
         interpolate: /{{([\s\S]+?)}}/g
       }
@@ -65,6 +71,15 @@ this.templateCache = {
 * `name: string` - defines the filename for outputted template file.
 * `variable: string` - defines the variable that shall be used to define the templates object. By default, this is `this.tmpl`.
 * `base: string` - defines the base directory to generate key names from. By default, this is the root of the repo where your gulpfile is located.
+* `bare: bool` - __use with caution__ - defines whether to use lodash templating or to simply create an object store for mapping file contents.
+
+  For example,
+  ```javascript
+    this.tmpl = {
+      "templates/superDiv": function() { return document.createElement('div'); }
+      "templates/log"   : function(msg) { console.log(msg); }
+    }
+  ```
 * `options: object` - defines an object containing options that will be passed to the lodash template compiler. Supported options are `interpolate`, `imports` and `variable`.
 
 ##Contributing
