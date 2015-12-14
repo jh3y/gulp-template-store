@@ -22,7 +22,7 @@ gulp.task('test:store', function(event) {
   return gulp.src(sources.templates)
     .pipe(store({
       // bare: true
-      // base: 'test/'
+      base: 'test\\'
       // options: {
       //   interpolate: /{{([\s\S]+?)}}/g
       // }

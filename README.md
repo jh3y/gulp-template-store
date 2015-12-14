@@ -67,6 +67,10 @@ this.templateCache = {
 }
 ```
 
+__NOTE__:: `gulp-template-store` aims to be platform agnostic. It has however been developed on a UNIX system. Therefore, no matter what `base` option is provided, whether one is provided or not, the keys in the resulting store will use forward slashes `/`.
+
+For example; on Windows, your template may be located at `\templates\a.html`. The output key will be `templates/a.html`.
+
 ##Options
 * `name: string` - defines the filename for outputted template file.
 * `variable: string` - defines the variable that shall be used to define the templates object. By default, this is `this.tmpl`.

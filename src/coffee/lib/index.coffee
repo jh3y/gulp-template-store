@@ -1,6 +1,7 @@
 through = require 'through2'
-util = require 'gulp-util'
-_ = require 'lodash'
+util    = require 'gulp-util'
+path    = require 'path'
+_       = require 'lodash'
 
 PLUGIN_NAME = 'gulp-template-store'
 rootDir = process.cwd()
@@ -12,7 +13,7 @@ templateStore = (opt) ->
   fileName = if opt.name and typeof opt.name is 'string' then opt.name else 'templates.js'
   fileVar = if opt.variable and typeof opt.variable is 'string' then opt.variable else 'this.tmpl'
   base = if opt.base and typeof opt.base is 'string' then opt.base else rootDir + '/'
-
+  base = base.replace /\\|\//g, path.sep
   tmpl = fileVar + ' = { <%= contents %> };'
 
   getTemplateFn = (file) ->
@@ -23,6 +24,7 @@ templateStore = (opt) ->
   processFile = (file) ->
     str = file.path
     key = str.slice(str.indexOf(base) + base.length, str.lastIndexOf('.'))
+    key = key.replace /\\|\//g, '/'
     return _.template('"<%= name %>": <%= contents %>')(
       name: key
       contents: if opt.bare then file.contents.toString() else getTemplateFn file
