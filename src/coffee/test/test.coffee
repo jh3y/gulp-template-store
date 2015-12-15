@@ -1,11 +1,12 @@
-assert = require 'stream-assert'
-expect = require('chai').expect
-tmplStore = require '../lib/index'
-path = require 'path'
-util = require 'gulp-util'
-gulp = require 'gulp'
-vm = require 'vm'
-_ = require 'lodash'
+assert      = require 'stream-assert'
+expect      = require('chai').expect
+tmplStore   = require '../lib/index'
+path        = require 'path'
+util        = require 'gulp-util'
+gulp        = require 'gulp'
+vm          = require 'vm'
+os          = require 'os'
+_           = require 'lodash'
 PLUGIN_NAME = 'gulp-template-store'
 
 getCompiledResult = (result) ->
@@ -15,7 +16,7 @@ getCompiledResult = (result) ->
   sandbox
 
 genFile = (path, contents) ->
-  path = if path then path else 'test.js'
+  path     = if path then path else 'test.html'
   contents = if contents then contents else '<div><%= test %></div>'
   new util.File
     path: process.cwd() + path
@@ -73,13 +74,28 @@ suite PLUGIN_NAME, ->
           expect(Object.keys(comp.tmpl).length).to.equal 2
         ))
         .pipe(assert.end(done))
-
+    # NOTE, gulp-template-store will convert base/source input but not convert output keys unless prompted to do so with the unix option.
     test 'sets template key by default to template path in repo', (done) ->
+      expKey = 'test/templates/a'.replace /\\|\//g, path.sep
       gulp.src(__dirname + '/templates/a.html')
         .pipe(tmplStore())
         .pipe(assert.first((d) ->
+          comp   = getCompiledResult d.contents.toString()
+          expect(comp.tmpl[expKey]).to.not.be.undefined
+        ))
+        .pipe(assert.end(done))
+
+    test 'converts path separator correctly for given base', (done) ->
+      oppoSep = if path.sep is '/' then '\\' else '/'
+      base    = oppoSep + 'test' + oppoSep
+      expKey  = 'templates/a'.replace /\\|\//g, path.sep
+      gulp.src(__dirname + '/templates/a.html')
+        .pipe(tmplStore({
+          base: base
+        }))
+        .pipe(assert.first((d) ->
           comp = getCompiledResult d.contents.toString()
-          expect(comp.tmpl['test/templates/a']).to.not.be.undefined
+          expect(comp.tmpl[expKey]).to.not.be.undefined
         ))
         .pipe(assert.end(done))
 
@@ -119,6 +135,32 @@ suite PLUGIN_NAME, ->
         stream.write fakeFile
         stream.end done
 
+      test 'UNIX option is respected by template store', (done) ->
+        a = ->
+        fakeFile   = genFile '/templates/test/test.js'
+        expKeyUNIX = 'test/test'
+        expKey     = if os.platform() is 'win32' then 'test\\test' else 'test/test'
+        stream     = tmplStore
+          unix: true
+          base: 'templates\\'
+
+        stream.on 'data', (file) ->
+          res = getCompiledResult file.contents.toString()
+          expect(res.tmpl[expKeyUNIX]).to.not.be.undefined
+
+        stream.write fakeFile
+
+        stream = tmplStore
+          unix: false
+          base: 'templates\\'
+
+        stream.on 'data', (file) ->
+          res = getCompiledResult file.contents.toString()
+          expect(res.tmpl[expKey]).to.not.be.undefined
+
+        stream.write fakeFile
+        stream.end done
+
       test 'barezzz', (done) ->
         a = ->
         fakeFile = genFile('a.js', a.toString())
@@ -151,10 +193,9 @@ suite PLUGIN_NAME, ->
           ))
           .pipe(assert.end(done))
 
+
       test 'correct output when using interpolate setting with for example handlebars', (done) ->
-        fakeFile = new util.File
-          path: process.cwd() + 'test.js'
-          contents: new Buffer '<div>{{ test }}</div>'
+        fakeFile = genFile 'test.js', '<div>{{ test }}</div>'
         _Res = _.template('<div>{{ test }}</div>',
           interpolate:  /{{([\s\S]+?)}}/g
         )(

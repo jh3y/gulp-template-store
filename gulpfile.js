@@ -21,9 +21,11 @@ gulp.task('test:store', function(event) {
   var store = require('./lib/index.js');
   return gulp.src(sources.templates)
     .pipe(store({
-      // bare: true
-      base: 'test\\'
-      // options: {
+      // bare    : true
+      // base    : 'test\\'
+      // variable: 'this.templates'
+      // unix    : false
+      // options : {
       //   interpolate: /{{([\s\S]+?)}}/g
       // }
     }))

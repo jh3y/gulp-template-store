@@ -1,4 +1,4 @@
-var PLUGIN_NAME, _, assert, expect, genFile, getCompiledResult, gulp, path, tmplStore, util, vm;
+var PLUGIN_NAME, _, assert, expect, genFile, getCompiledResult, gulp, os, path, tmplStore, util, vm;
 
 assert = require('stream-assert');
 
@@ -14,6 +14,8 @@ gulp = require('gulp');
 
 vm = require('vm');
 
+os = require('os');
+
 _ = require('lodash');
 
 PLUGIN_NAME = 'gulp-template-store';
@@ -28,7 +30,7 @@ getCompiledResult = function(result) {
 };
 
 genFile = function(path, contents) {
-  path = path ? path : 'test.js';
+  path = path ? path : 'test.html';
   contents = contents ? contents : '<div><%= test %></div>';
   return new util.File({
     path: process.cwd() + path,
@@ -83,10 +85,25 @@ suite(PLUGIN_NAME, function() {
       })).pipe(assert.end(done));
     });
     test('sets template key by default to template path in repo', function(done) {
+      var expKey;
+      expKey = 'test/templates/a'.replace(/\\|\//g, path.sep);
       return gulp.src(__dirname + '/templates/a.html').pipe(tmplStore()).pipe(assert.first(function(d) {
         var comp;
         comp = getCompiledResult(d.contents.toString());
-        return expect(comp.tmpl['test/templates/a']).to.not.be.undefined;
+        return expect(comp.tmpl[expKey]).to.not.be.undefined;
+      })).pipe(assert.end(done));
+    });
+    test('converts path separator correctly for given base', function(done) {
+      var base, expKey, oppoSep;
+      oppoSep = path.sep === '/' ? '\\' : '/';
+      base = oppoSep + 'test' + oppoSep;
+      expKey = 'templates/a'.replace(/\\|\//g, path.sep);
+      return gulp.src(__dirname + '/templates/a.html').pipe(tmplStore({
+        base: base
+      })).pipe(assert.first(function(d) {
+        var comp;
+        comp = getCompiledResult(d.contents.toString());
+        return expect(comp.tmpl[expKey]).to.not.be.undefined;
       })).pipe(assert.end(done));
     });
     test('generates correct lodash template sources', function(done) {
@@ -136,6 +153,34 @@ suite(PLUGIN_NAME, function() {
         stream.write(fakeFile);
         return stream.end(done);
       });
+      test('UNIX option is respected by template store', function(done) {
+        var a, expKey, expKeyUNIX, fakeFile, stream;
+        a = function() {};
+        fakeFile = genFile('/templates/test/test.js');
+        expKeyUNIX = 'test/test';
+        expKey = os.platform() === 'win32' ? 'test\\test' : 'test/test';
+        stream = tmplStore({
+          unix: true,
+          base: 'templates\\'
+        });
+        stream.on('data', function(file) {
+          var res;
+          res = getCompiledResult(file.contents.toString());
+          return expect(res.tmpl[expKeyUNIX]).to.not.be.undefined;
+        });
+        stream.write(fakeFile);
+        stream = tmplStore({
+          unix: false,
+          base: 'templates\\'
+        });
+        stream.on('data', function(file) {
+          var res;
+          res = getCompiledResult(file.contents.toString());
+          return expect(res.tmpl[expKey]).to.not.be.undefined;
+        });
+        stream.write(fakeFile);
+        return stream.end(done);
+      });
       test('barezzz', function(done) {
         var a, fakeFile, stream;
         a = function() {};
@@ -176,10 +221,7 @@ suite(PLUGIN_NAME, function() {
       });
       return test('correct output when using interpolate setting with for example handlebars', function(done) {
         var _Res, fakeFile, stream;
-        fakeFile = new util.File({
-          path: process.cwd() + 'test.js',
-          contents: new Buffer('<div>{{ test }}</div>')
-        });
+        fakeFile = genFile('test.js', '<div>{{ test }}</div>');
         _Res = _.template('<div>{{ test }}</div>', {
           interpolate: /{{([\s\S]+?)}}/g
         })({

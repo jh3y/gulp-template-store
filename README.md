@@ -67,15 +67,18 @@ this.templateCache = {
 }
 ```
 
-__NOTE__:: `gulp-template-store` aims to be platform agnostic. It has however been developed on a UNIX system. Therefore, no matter what `base` option is provided, whether one is provided or not, the keys in the resulting store will use forward slashes `/`.
+__NOTE__:: `gulp-template-store` aims to be platform agnostic. It has been developed on a UNIX system. Whatever `base` option is provided, `gulp-template-store` will interpret them using the current OS path separator by converting any slashes.
 
-For example; on Windows, your template may be located at `\templates\a.html`. The output key will be `templates/a.html`.
+By default, the keys in the resulting store will use forward slashes `/` (UNIX style). For example; on Windows, your template may be located at `\templates\a.html`. The output key will be `templates/a`.
+
+However, you can override this by setting the `unix` option to `false` if you wish for keys to use the platform path separator. Take into consideration that this may affect those working on a different platform.
 
 ##Options
-* `name: string` - defines the filename for outputted template file.
-* `variable: string` - defines the variable that shall be used to define the templates object. By default, this is `this.tmpl`.
-* `base: string` - defines the base directory to generate key names from. By default, this is the root of the repo where your gulpfile is located.
-* `bare: bool` - __use with caution__ - defines whether to use lodash templating or to simply create an object store for mapping file contents.
+* `name: {String}` - Defines the filename for outputted template file.
+* `variable: {String}` - Defines the variable that shall be used to define the templates object. By default, this is `this.tmpl`.
+* `base: {String}` - Defines the base directory to generate key names from. By default, this is the root of the repo where your gulpfile is located.
+* `unix: {Bool}` - Defines whether to use forward slashes `/` in keys. When false, will use platform specific path separator. For Windows, `\`. Defaults to `true`.
+* `bare: {Bool}` - __use with caution__ - Defines whether to use lodash templating or to simply create an object store for mapping file contents. Defaults to `false`.
 
   For example,
   ```javascript
