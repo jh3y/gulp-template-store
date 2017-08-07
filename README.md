@@ -1,7 +1,9 @@
 [![NPM](https://nodei.co/npm/gulp-template-store.png?downloads=true)](https://nodei.co/npm/gulp-template-store/)
 
 [![Build Status](https://travis-ci.org/jh3y/gulp-template-store.svg)](https://travis-ci.org/jh3y/gulp-template-store)
-#gulp-template-store
+
+# gulp-template-store
+
 A gulp plugin for storing all of your lodash templates in a single cache file.
 
 ```javascript
@@ -24,13 +26,13 @@ this.tmpl = {
 }
 ```
 
-##Install
+## Install
 Install using [npm](https://npmjs.org/package/gulp-template-store)
 
 ```
 npm install gulp-template-store
 ```
-##Example use
+## Example use
 
 ```javascript
 var gulp = require('gulp'),
@@ -73,7 +75,7 @@ By default, the keys in the resulting store will use forward slashes `/` (UNIX s
 
 However, you can override this by setting the `unix` option to `false` if you wish for keys to use the platform path separator. Take into consideration that this may affect those working on a different platform.
 
-##Options
+## Options
 * `name: {String}` - Defines the filename for outputted template file.
 * `variable: {String}` - Defines the variable that shall be used to define the templates object. By default, this is `this.tmpl`.
 * `base: {String}` - Defines the base directory to generate key names from. By default, this is the root of the repo where your gulpfile is located.
@@ -92,7 +94,7 @@ However, you can override this by setting the `unix` option to `false` if you wi
 ##Contributing
 Contributions are welcome. Feel free to submit a PR or open an issue if there's something you think is missing.
 
-##License
+## License
 MIT
 
 @jh3y 2015
